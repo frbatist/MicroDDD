@@ -65,8 +65,8 @@ namespace MicroDDD.Infra.Helpers
 
         private async Task<T> DesserializaResponse<T>(ResponseRequisicao retornoRequisicao)
         {
-            string json = await ObterJsonResponse(retornoRequisicao);
-            T retorno = JsonConvert.DeserializeObject<T>(json);
+            var json = await ObterJsonResponse(retornoRequisicao);
+            var retorno = JsonConvert.DeserializeObject<T>(json);
             json = null;
             return retorno;
         }
@@ -139,23 +139,23 @@ namespace MicroDDD.Infra.Helpers
         private async Task<HttpResponseMessage> ObterResponsePorTipoRequisicao<T>(HttpClient client, string endereco, 
             TipoRequisicao tipoRequisicao, T valor)
         {
-            var configuraRequisicao = ConfigurarRequisicao<T>();
+            var configuraRequisicao = ConfigurarRequisicao<T>(_configuracoesRequisicaoRest);
             switch (tipoRequisicao)
             {
                 case TipoRequisicao.Get:
-                    return await client.GetAsync(endereco);
+                    return await client.GetAsync(endereco, _configuracoesRequisicaoRest.TimeOut, configuraRequisicao);
                 case TipoRequisicao.Post:
-                    string stringjson = JsonConvert.SerializeObject(valor);
+                    var stringjson = JsonConvert.SerializeObject(valor);
                     var stringContent = new StringContent(stringjson, Encoding.UTF8, "application/json");
-                    return await client.PostAsync(endereco, stringContent);
+                    return await client.PostAsync(endereco, stringContent, _configuracoesRequisicaoRest.TimeOut, configuraRequisicao);
                 case TipoRequisicao.Delete:
-                    return await client.DeleteAsync(endereco);
+                    return await client.DeleteAsync(endereco, _configuracoesRequisicaoRest.TimeOut, configuraRequisicao);
                 case TipoRequisicao.Put:
                     stringjson = JsonConvert.SerializeObject(valor);
                     stringContent = new StringContent(stringjson, Encoding.UTF8, "application/json");
-                    return await client.PutAsync(endereco, stringContent);
+                    return await client.PutAsync(endereco, stringContent, _configuracoesRequisicaoRest.TimeOut, configuraRequisicao);
                 default:
-                    return await client.GetAsync(endereco);
+                    return await client.GetAsync(endereco, _configuracoesRequisicaoRest.TimeOut, configuraRequisicao);
             }
         }
 
@@ -178,8 +178,11 @@ namespace MicroDDD.Infra.Helpers
                         d.Headers.Add(header.Key, header.Value);
                     }
                 }
-                //client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip");
-                //token
+                if (!string.IsNullOrEmpty(configuracoesRequisicaoRest.BearerToken))
+                {
+                    d.Headers.Authorization = new AuthenticationHeaderValue("bearer", configuracoesRequisicaoRest.BearerToken);
+                }
+                d.Headers.Add("Accept-Encoding", "gzip");
             };
         }
 
