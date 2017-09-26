@@ -11,8 +11,8 @@ namespace MicroDDD.Infra.Helpers
 {
     public class RestHelper
     {
-        private IHttpClientHelper _httpClientHelper;
-        private ICompactacaoHelper _compactacaoHelper;
+        private readonly IHttpClientHelper _httpClientHelper;
+        private readonly ICompactacaoHelper _compactacaoHelper;
 
         public RestHelper(IHttpClientHelper httpClientHelper, ICompactacaoHelper compactacaoHelper)
         {
@@ -24,14 +24,14 @@ namespace MicroDDD.Infra.Helpers
         {
             return await ObterResponseRetornoRequisicao<object, T>(endereco, TipoRequisicao.Get, null, timeout, requestHeaders, requestHeadersNomeValor);
         }
-        public async Task<R> Post<R, T>(string endereco, TimeSpan timeout, T valor, string[] requestHeaders = null, IDictionary<string, string> requestHeadersNomeValor = null)
+        public async Task<TR> Post<TR, T>(string endereco, TimeSpan timeout, T valor, string[] requestHeaders = null, IDictionary<string, string> requestHeadersNomeValor = null)
         {
-            return await ObterResponseRetornoRequisicao<T, R>(endereco, TipoRequisicao.Post, valor, timeout, requestHeaders, requestHeadersNomeValor);
+            return await ObterResponseRetornoRequisicao<T, TR>(endereco, TipoRequisicao.Post, valor, timeout, requestHeaders, requestHeadersNomeValor);
         }
 
-        public async Task<R> Put<R, T>(string endereco, TimeSpan timeout, T valor, string[] requestHeaders = null, IDictionary<string, string> requestHeadersNomeValor = null)
+        public async Task<TR> Put<TR, T>(string endereco, TimeSpan timeout, T valor, string[] requestHeaders = null, IDictionary<string, string> requestHeadersNomeValor = null)
         {
-            return await ObterResponseRetornoRequisicao<T, R>(endereco, TipoRequisicao.Put, valor, timeout, requestHeaders, requestHeadersNomeValor);
+            return await ObterResponseRetornoRequisicao<T, TR>(endereco, TipoRequisicao.Put, valor, timeout, requestHeaders, requestHeadersNomeValor);
         }
 
         public async Task<T> Delete<T>(string endereco, TimeSpan timeout, string[] requestHeaders = null, IDictionary<string, string> requestHeadersNomeValor = null)
@@ -39,19 +39,19 @@ namespace MicroDDD.Infra.Helpers
             return await ObterResponseRetornoRequisicao<object, T>(endereco, TipoRequisicao.Delete, null, timeout, requestHeaders, requestHeadersNomeValor);
         }
 
-        private async Task<R> ObterResponseRetornoRequisicao<T, R>(string endereco, TipoRequisicao tipoRequisicao, T valor, TimeSpan timeout, string[] requestHeaders, 
+        private async Task<TR> ObterResponseRetornoRequisicao<T, TR>(string endereco, TipoRequisicao tipoRequisicao, T valor, TimeSpan timeout, string[] requestHeaders, 
             IDictionary<string, string> requestHeadersNomeValor)
         {
             if (timeout == null)
                 timeout = TimeSpan.FromMinutes(30);
             HttpClient client = _httpClientHelper.ObterHttpClient();
-            ConfiguraClient(client, timeout, requestHeaders, requestHeadersNomeValor);
-            var retornoRequisicao = await ObterRetornoRequisicao(client, endereco, tipoRequisicao, valor);
+            var retornoRequisicao = await ObterRetornoRequisicao(client, endereco, tipoRequisicao, valor, 
+                timeout, requestHeaders, requestHeadersNomeValor);
             if (retornoRequisicao.Dados == null)
             {
-                return default(R);
+                return default(TR);
             }
-            return await DesserializaResponse<R>(retornoRequisicao);
+            return await DesserializaResponse<TR>(retornoRequisicao);
         }
 
         private async Task<T> DesserializaResponse<T>(ResponseRequisicao retornoRequisicao)
@@ -78,31 +78,13 @@ namespace MicroDDD.Infra.Helpers
             return json;
         }
 
-        private void ConfiguraClient(HttpClient client, TimeSpan timeout, string[] requestHeaders, IDictionary<string, string> requestHeadersNomeValor)
-        {
-            if (requestHeaders != null)
-            {
-                foreach (var header in requestHeaders)
-                {
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(header));
-                }
-            }
-            client.Timeout = timeout;
-            client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip");
-            if (requestHeadersNomeValor != null)
-            {
-                foreach (var item in requestHeadersNomeValor)
-                {
-                    client.DefaultRequestHeaders.Add(item.Key, item.Value);
-                }
-            }
-        }
-
-        private async Task<ResponseRequisicao> ObterRetornoRequisicao<T>(HttpClient client, string endereco, TipoRequisicao tipoRequisicao, T valor)
+        private async Task<ResponseRequisicao> ObterRetornoRequisicao<T>(HttpClient client, string endereco, TipoRequisicao tipoRequisicao, 
+            T valor, TimeSpan timeout, string[] requestHeaders, IDictionary<string, string> requestHeadersNomeValor)
         {
             try
             {
-                using (var response = await ObterResponsePorTipoRequisicao(client, endereco, tipoRequisicao, valor))
+                using (var response = await ObterResponsePorTipoRequisicao(client, endereco, tipoRequisicao, valor, 
+                    timeout, requestHeaders, requestHeadersNomeValor))
                 {
                     if (response.IsSuccessStatusCode)
                     {
@@ -146,8 +128,13 @@ namespace MicroDDD.Infra.Helpers
             public bool Gzip { get; set; }
         }
 
-        private async Task<HttpResponseMessage> ObterResponsePorTipoRequisicao<T>(HttpClient client, string endereco, TipoRequisicao tipoRequisicao, T valor)
+        private async Task<HttpResponseMessage> ObterResponsePorTipoRequisicao<T>(HttpClient client, string endereco, 
+            TipoRequisicao tipoRequisicao, T valor, TimeSpan timeout, string[] requestHeaders, 
+            IDictionary<string, string> requestHeadersNomeValor)
         {
+//            Action<HttpRequestMessage> asd = new Action<HttpRequestMessage>(
+//                d=> d.Properties.
+//            
             switch (tipoRequisicao)
             {
                 case TipoRequisicao.Get:
@@ -167,7 +154,7 @@ namespace MicroDDD.Infra.Helpers
             }
         }
 
-        public async Task GravaRetornoApiDescompactadoAsync (string endereco, string[] requestHeaders, string LocalGravacao)
+        public async Task GravaRetornoApiDescompactadoAsync (string endereco, string[] requestHeaders, string localGravacao)
         {
             byte[] registros = null;
             var client = _httpClientHelper.ObterHttpClient();
@@ -193,7 +180,7 @@ namespace MicroDDD.Infra.Helpers
             }
 
             byte[] descompactado = await _compactacaoHelper.DescompactaGzipAsync(registros);
-            using (FileStream file = new FileStream(LocalGravacao, FileMode.Create))
+            using (FileStream file = new FileStream(localGravacao, FileMode.Create))
             {
                 await file.WriteAsync(descompactado, 0, descompactado.Length);
             }
