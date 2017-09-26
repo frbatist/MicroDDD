@@ -9,44 +9,53 @@ using System.Threading.Tasks;
 
 namespace MicroDDD.Infra.Helpers
 {
+    public class ConfiguracoesRequisicaoRest
+    {
+        public string[] RequestHeaders { get; set; }
+        public IDictionary<string, string> RequestHeadersNomeValor { get; set; }
+        public TimeSpan TimeOut { get; set; }
+        public string BearerToken { get; set; }
+    }
+
     public class RestHelper
     {
         private readonly IHttpClientHelper _httpClientHelper;
         private readonly ICompactacaoHelper _compactacaoHelper;
+        private ConfiguracoesRequisicaoRest _configuracoesRequisicaoRest;
 
         public RestHelper(IHttpClientHelper httpClientHelper, ICompactacaoHelper compactacaoHelper)
         {
             _httpClientHelper = httpClientHelper;
             _compactacaoHelper = compactacaoHelper;
         }
-
-        public async Task<T> Get<T>(string endereco, TimeSpan timeout, string[] requestHeaders = null, IDictionary<string, string> requestHeadersNomeValor = null)
+        
+        public async Task<T> Get<T>(string endereco, ConfiguracoesRequisicaoRest configuracoesRequisicaoRest = null)
         {
-            return await ObterResponseRetornoRequisicao<object, T>(endereco, TipoRequisicao.Get, null, timeout, requestHeaders, requestHeadersNomeValor);
+            _configuracoesRequisicaoRest = configuracoesRequisicaoRest;
+            return await ObterResponseRetornoRequisicao<object, T>(endereco, TipoRequisicao.Get, null);
         }
-        public async Task<TR> Post<TR, T>(string endereco, TimeSpan timeout, T valor, string[] requestHeaders = null, IDictionary<string, string> requestHeadersNomeValor = null)
+        public async Task<TR> Post<TR, T>(string endereco, T valor, ConfiguracoesRequisicaoRest configuracoesRequisicaoRest = null)
         {
-            return await ObterResponseRetornoRequisicao<T, TR>(endereco, TipoRequisicao.Post, valor, timeout, requestHeaders, requestHeadersNomeValor);
-        }
-
-        public async Task<TR> Put<TR, T>(string endereco, TimeSpan timeout, T valor, string[] requestHeaders = null, IDictionary<string, string> requestHeadersNomeValor = null)
-        {
-            return await ObterResponseRetornoRequisicao<T, TR>(endereco, TipoRequisicao.Put, valor, timeout, requestHeaders, requestHeadersNomeValor);
+            _configuracoesRequisicaoRest = configuracoesRequisicaoRest;
+            return await ObterResponseRetornoRequisicao<T, TR>(endereco, TipoRequisicao.Post, valor);
         }
 
-        public async Task<T> Delete<T>(string endereco, TimeSpan timeout, string[] requestHeaders = null, IDictionary<string, string> requestHeadersNomeValor = null)
+        public async Task<TR> Put<TR, T>(string endereco, T valor, ConfiguracoesRequisicaoRest configuracoesRequisicaoRest = null)
         {
-            return await ObterResponseRetornoRequisicao<object, T>(endereco, TipoRequisicao.Delete, null, timeout, requestHeaders, requestHeadersNomeValor);
+            _configuracoesRequisicaoRest = configuracoesRequisicaoRest;
+            return await ObterResponseRetornoRequisicao<T, TR>(endereco, TipoRequisicao.Put, valor);
         }
 
-        private async Task<TR> ObterResponseRetornoRequisicao<T, TR>(string endereco, TipoRequisicao tipoRequisicao, T valor, TimeSpan timeout, string[] requestHeaders, 
-            IDictionary<string, string> requestHeadersNomeValor)
+        public async Task<T> Delete<T>(string endereco, ConfiguracoesRequisicaoRest configuracoesRequisicaoRest = null)
         {
-            if (timeout == null)
-                timeout = TimeSpan.FromMinutes(30);
+            _configuracoesRequisicaoRest = configuracoesRequisicaoRest;
+            return await ObterResponseRetornoRequisicao<object, T>(endereco, TipoRequisicao.Delete, null);
+        }
+
+        private async Task<TR> ObterResponseRetornoRequisicao<T, TR>(string endereco, TipoRequisicao tipoRequisicao, T valor)
+        {
             HttpClient client = _httpClientHelper.ObterHttpClient();
-            var retornoRequisicao = await ObterRetornoRequisicao(client, endereco, tipoRequisicao, valor, 
-                timeout, requestHeaders, requestHeadersNomeValor);
+            var retornoRequisicao = await ObterRetornoRequisicao(client, endereco, tipoRequisicao, valor);
             if (retornoRequisicao.Dados == null)
             {
                 return default(TR);
@@ -79,12 +88,11 @@ namespace MicroDDD.Infra.Helpers
         }
 
         private async Task<ResponseRequisicao> ObterRetornoRequisicao<T>(HttpClient client, string endereco, TipoRequisicao tipoRequisicao, 
-            T valor, TimeSpan timeout, string[] requestHeaders, IDictionary<string, string> requestHeadersNomeValor)
+            T valor)
         {
             try
             {
-                using (var response = await ObterResponsePorTipoRequisicao(client, endereco, tipoRequisicao, valor, 
-                    timeout, requestHeaders, requestHeadersNomeValor))
+                using (var response = await ObterResponsePorTipoRequisicao(client, endereco, tipoRequisicao, valor))
                 {
                     if (response.IsSuccessStatusCode)
                     {
@@ -129,12 +137,9 @@ namespace MicroDDD.Infra.Helpers
         }
 
         private async Task<HttpResponseMessage> ObterResponsePorTipoRequisicao<T>(HttpClient client, string endereco, 
-            TipoRequisicao tipoRequisicao, T valor, TimeSpan timeout, string[] requestHeaders, 
-            IDictionary<string, string> requestHeadersNomeValor)
+            TipoRequisicao tipoRequisicao, T valor)
         {
-//            Action<HttpRequestMessage> asd = new Action<HttpRequestMessage>(
-//                d=> d.Properties.
-//            
+            var configuraRequisicao = ConfigurarRequisicao<T>();
             switch (tipoRequisicao)
             {
                 case TipoRequisicao.Get:
@@ -154,39 +159,28 @@ namespace MicroDDD.Infra.Helpers
             }
         }
 
-        public async Task GravaRetornoApiDescompactadoAsync (string endereco, string[] requestHeaders, string localGravacao)
+        private static Action<HttpRequestMessage> ConfigurarRequisicao<T>(ConfiguracoesRequisicaoRest configuracoesRequisicaoRest)
         {
-            byte[] registros = null;
-            var client = _httpClientHelper.ObterHttpClient();
-            client.Timeout = TimeSpan.FromMinutes(10);
-            client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip");
-
-            if (requestHeaders != null)
-                foreach (var header in requestHeaders)
-                {
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(header));
-                }
-
-            using (HttpResponseMessage response = client.GetAsync(endereco).Result)
+            return d =>
             {
-                if (response.IsSuccessStatusCode)
+                if (configuracoesRequisicaoRest == null) return;
+                if (configuracoesRequisicaoRest.RequestHeaders != null)
                 {
-                    registros = response.Content.ReadAsByteArrayAsync().Result;
+                    foreach (var header in configuracoesRequisicaoRest.RequestHeaders)
+                    {
+                        d.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(header));
+                    }
                 }
-                if (registros == null)
+                if (configuracoesRequisicaoRest.RequestHeadersNomeValor == null) return;
                 {
-                    return;
+                    foreach (var header in configuracoesRequisicaoRest.RequestHeadersNomeValor)
+                    {
+                        d.Headers.Add(header.Key, header.Value);
+                    }
                 }
-            }
-
-            byte[] descompactado = await _compactacaoHelper.DescompactaGzipAsync(registros);
-            using (FileStream file = new FileStream(localGravacao, FileMode.Create))
-            {
-                await file.WriteAsync(descompactado, 0, descompactado.Length);
-            }
-            registros = null;
-            descompactado = null;
-
+                //client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip");
+                //token
+            };
         }
 
         public enum TipoRequisicao
