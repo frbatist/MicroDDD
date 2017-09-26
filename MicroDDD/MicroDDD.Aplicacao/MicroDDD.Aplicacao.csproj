@@ -6,9 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MicroDDD.Dominio\MicroDDD.Dominio.csproj" />
-    <ProjectReference Include="..\MicroDDD.Infra.IoC\MicroDDD.Infra.IoC.csproj" />
-    <ProjectReference Include="..\MicroDDD.Infra.ORM\MicroDDD.Infra.ORM.csproj" />
-    <ProjectReference Include="..\MicroDDD.Infra\MicroDDD.Infra.csproj" />
   </ItemGroup>
 
 </Project>

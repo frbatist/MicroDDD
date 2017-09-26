@@ -1,5 +1,4 @@
-﻿using System;
-using MicroDDD.Aplicacao.Identidade;
+﻿using MicroDDD.Aplicacao.Identidade;
 using MicroDDD.Dominio.Repositorio;
 using MicroDDD.Dominio.Entidade;
 

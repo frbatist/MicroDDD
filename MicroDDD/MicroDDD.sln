@@ -3,15 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroDDD.Dominio", "MicroDDD.Dominio\MicroDDD.Dominio.csproj", "{E56A479A-9821-47A4-B3F3-D15E888002F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroDDD.Dominio", "MicroDDD.Dominio\MicroDDD.Dominio.csproj", "{E56A479A-9821-47A4-B3F3-D15E888002F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroDDD.Aplicacao", "MicroDDD.Aplicacao\MicroDDD.Aplicacao.csproj", "{4D666164-7D53-4A9B-9BBB-9894D1C696DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroDDD.Aplicacao", "MicroDDD.Aplicacao\MicroDDD.Aplicacao.csproj", "{4D666164-7D53-4A9B-9BBB-9894D1C696DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroDDD.Infra", "MicroDDD.Infra\MicroDDD.Infra.csproj", "{CD6B86FF-6F9D-43EB-ACD8-AA5386235EDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroDDD.Infra", "MicroDDD.Infra\MicroDDD.Infra.csproj", "{CD6B86FF-6F9D-43EB-ACD8-AA5386235EDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroDDD.Infra.ORM", "MicroDDD.Infra.ORM\MicroDDD.Infra.ORM.csproj", "{E699D905-875B-405D-9022-F3D4E5C837E1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroDDD.Infra.IoC", "MicroDDD.Infra.IoC\MicroDDD.Infra.IoC.csproj", "{8845A6A0-3783-427C-AA6E-7AD9D186DB30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroDDD.Infra.IoC", "MicroDDD.Infra.IoC\MicroDDD.Infra.IoC.csproj", "{8845A6A0-3783-427C-AA6E-7AD9D186DB30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +29,6 @@ Global
 		{CD6B86FF-6F9D-43EB-ACD8-AA5386235EDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD6B86FF-6F9D-43EB-ACD8-AA5386235EDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD6B86FF-6F9D-43EB-ACD8-AA5386235EDC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E699D905-875B-405D-9022-F3D4E5C837E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E699D905-875B-405D-9022-F3D4E5C837E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E699D905-875B-405D-9022-F3D4E5C837E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E699D905-875B-405D-9022-F3D4E5C837E1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8845A6A0-3783-427C-AA6E-7AD9D186DB30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8845A6A0-3783-427C-AA6E-7AD9D186DB30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8845A6A0-3783-427C-AA6E-7AD9D186DB30}.Release|Any CPU.ActiveCfg = Release|Any CPU
