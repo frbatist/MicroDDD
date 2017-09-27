@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -9,15 +7,7 @@ using System.Threading.Tasks;
 
 namespace MicroDDD.Infra.Helpers
 {
-    public class ConfiguracoesRequisicaoRest
-    {
-        public string[] RequestHeaders { get; set; }
-        public IDictionary<string, string> RequestHeadersNomeValor { get; set; }
-        public TimeSpan TimeOut { get; set; }
-        public string BearerToken { get; set; }
-    }
-
-    public class RestHelper
+    public class RestHelper : IRestHelper
     {
         private readonly IHttpClientHelper _httpClientHelper;
         private readonly ICompactacaoHelper _compactacaoHelper;
@@ -27,32 +17,36 @@ namespace MicroDDD.Infra.Helpers
         {
             _httpClientHelper = httpClientHelper;
             _compactacaoHelper = compactacaoHelper;
+            _configuracoesRequisicaoRest = new ConfiguracoesRequisicaoRest
+            {
+                TimeOut = TimeSpan.FromMinutes(5)
+            };
         }
         
         public async Task<T> Get<T>(string endereco, ConfiguracoesRequisicaoRest configuracoesRequisicaoRest = null)
         {
             _configuracoesRequisicaoRest = configuracoesRequisicaoRest;
-            return await ObterResponseRetornoRequisicao<object, T>(endereco, TipoRequisicao.Get, null);
+            return await ObterResponseRetornoRequisicao<object, T>(endereco, TipoRequisicaoRest.Get, null);
         }
         public async Task<TR> Post<TR, T>(string endereco, T valor, ConfiguracoesRequisicaoRest configuracoesRequisicaoRest = null)
         {
             _configuracoesRequisicaoRest = configuracoesRequisicaoRest;
-            return await ObterResponseRetornoRequisicao<T, TR>(endereco, TipoRequisicao.Post, valor);
+            return await ObterResponseRetornoRequisicao<T, TR>(endereco, TipoRequisicaoRest.Post, valor);
         }
 
         public async Task<TR> Put<TR, T>(string endereco, T valor, ConfiguracoesRequisicaoRest configuracoesRequisicaoRest = null)
         {
             _configuracoesRequisicaoRest = configuracoesRequisicaoRest;
-            return await ObterResponseRetornoRequisicao<T, TR>(endereco, TipoRequisicao.Put, valor);
+            return await ObterResponseRetornoRequisicao<T, TR>(endereco, TipoRequisicaoRest.Put, valor);
         }
 
         public async Task<T> Delete<T>(string endereco, ConfiguracoesRequisicaoRest configuracoesRequisicaoRest = null)
         {
             _configuracoesRequisicaoRest = configuracoesRequisicaoRest;
-            return await ObterResponseRetornoRequisicao<object, T>(endereco, TipoRequisicao.Delete, null);
+            return await ObterResponseRetornoRequisicao<object, T>(endereco, TipoRequisicaoRest.Delete, null);
         }
 
-        private async Task<TR> ObterResponseRetornoRequisicao<T, TR>(string endereco, TipoRequisicao tipoRequisicao, T valor)
+        private async Task<TR> ObterResponseRetornoRequisicao<T, TR>(string endereco, TipoRequisicaoRest tipoRequisicao, T valor)
         {
             HttpClient client = _httpClientHelper.ObterHttpClient();
             var retornoRequisicao = await ObterRetornoRequisicao(client, endereco, tipoRequisicao, valor);
@@ -63,7 +57,7 @@ namespace MicroDDD.Infra.Helpers
             return await DesserializaResponse<TR>(retornoRequisicao);
         }
 
-        private async Task<T> DesserializaResponse<T>(ResponseRequisicao retornoRequisicao)
+        private async Task<T> DesserializaResponse<T>(ResponseRequisicaoRest retornoRequisicao)
         {
             var json = await ObterJsonResponse(retornoRequisicao);
             var retorno = JsonConvert.DeserializeObject<T>(json);
@@ -71,7 +65,7 @@ namespace MicroDDD.Infra.Helpers
             return retorno;
         }
 
-        private async Task<string> ObterJsonResponse(ResponseRequisicao retornoRequisicao)
+        private async Task<string> ObterJsonResponse(ResponseRequisicaoRest retornoRequisicao)
         {
             string json = "";
             if (retornoRequisicao.Gzip)
@@ -87,7 +81,7 @@ namespace MicroDDD.Infra.Helpers
             return json;
         }
 
-        private async Task<ResponseRequisicao> ObterRetornoRequisicao<T>(HttpClient client, string endereco, TipoRequisicao tipoRequisicao, 
+        private async Task<ResponseRequisicaoRest> ObterRetornoRequisicao<T>(HttpClient client, string endereco, TipoRequisicaoRest tipoRequisicao, 
             T valor)
         {
             try
@@ -96,7 +90,7 @@ namespace MicroDDD.Infra.Helpers
                 {
                     if (response.IsSuccessStatusCode)
                     {
-                        return new ResponseRequisicao
+                        return new ResponseRequisicaoRest
                         {
                             Dados = await response.Content.ReadAsByteArrayAsync(),
                             Gzip = response.Content.Headers.ContentEncoding.Contains("gzip")
@@ -130,27 +124,21 @@ namespace MicroDDD.Infra.Helpers
             }
         }
 
-        public class ResponseRequisicao
-        {
-            public byte[] Dados { get; set; }
-            public bool Gzip { get; set; }
-        }
-
         private async Task<HttpResponseMessage> ObterResponsePorTipoRequisicao<T>(HttpClient client, string endereco, 
-            TipoRequisicao tipoRequisicao, T valor)
+            TipoRequisicaoRest tipoRequisicao, T valor)
         {
             var configuraRequisicao = ConfigurarRequisicao<T>(_configuracoesRequisicaoRest);
             switch (tipoRequisicao)
             {
-                case TipoRequisicao.Get:
+                case TipoRequisicaoRest.Get:
                     return await client.GetAsync(endereco, _configuracoesRequisicaoRest.TimeOut, configuraRequisicao);
-                case TipoRequisicao.Post:
+                case TipoRequisicaoRest.Post:
                     var stringjson = JsonConvert.SerializeObject(valor);
                     var stringContent = new StringContent(stringjson, Encoding.UTF8, "application/json");
                     return await client.PostAsync(endereco, stringContent, _configuracoesRequisicaoRest.TimeOut, configuraRequisicao);
-                case TipoRequisicao.Delete:
+                case TipoRequisicaoRest.Delete:
                     return await client.DeleteAsync(endereco, _configuracoesRequisicaoRest.TimeOut, configuraRequisicao);
-                case TipoRequisicao.Put:
+                case TipoRequisicaoRest.Put:
                     stringjson = JsonConvert.SerializeObject(valor);
                     stringContent = new StringContent(stringjson, Encoding.UTF8, "application/json");
                     return await client.PutAsync(endereco, stringContent, _configuracoesRequisicaoRest.TimeOut, configuraRequisicao);
@@ -163,7 +151,6 @@ namespace MicroDDD.Infra.Helpers
         {
             return d =>
             {
-                if (configuracoesRequisicaoRest == null) return;
                 if (configuracoesRequisicaoRest.RequestHeaders != null)
                 {
                     foreach (var header in configuracoesRequisicaoRest.RequestHeaders)
@@ -184,14 +171,6 @@ namespace MicroDDD.Infra.Helpers
                 }
                 d.Headers.Add("Accept-Encoding", "gzip");
             };
-        }
-
-        public enum TipoRequisicao
-        {
-            Get,
-            Post,
-            Delete,
-            Put
-        }
+        }        
     }
 }

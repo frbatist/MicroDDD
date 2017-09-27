@@ -1,27 +1,28 @@
 ﻿using MicroDDD.Aplicacao.Identidade;
 using MicroDDD.Dominio.Repositorio;
 using MicroDDD.Dominio.Entidade;
+using System.Threading.Tasks;
 
 namespace MicroDDD.Aplicacao
 {
     public class AplicacaoBase : IAplicacao
     {
         public IUsuarioAplicacao UsuarioAplicacao { get; set; }
-        private IRepositorioEscopo _repositorioEscopo;
+        private IUnidadeTrabalho _unidadeTrabalho;
 
-        public AplicacaoBase(IRepositorioEscopo repositorioEscopo)
+        public AplicacaoBase(IUnidadeTrabalho unidadeTrabalho)
         {
-            _repositorioEscopo = repositorioEscopo;
+            _unidadeTrabalho = unidadeTrabalho;
         }
 
-        public IRepositorio<T> Repositorio<T>() where T : IEntidade
+        public async Task SalvarAlteracoes()
         {
-            return _repositorioEscopo.ObterRepositorio<T>();
+            await _unidadeTrabalho.FinalizarAsync();
         }
 
         public void Dispose()
         {
-            _repositorioEscopo.Dispose();
+            _unidadeTrabalho.Dispose();
         }
     }
 }
