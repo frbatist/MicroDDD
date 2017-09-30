@@ -28,31 +28,31 @@ namespace MicroDDD.Dominio.Repositorio
         /// Remove as entidades informadas
         /// </summary>
         /// <param name="entidades"></param>
-        void RemoverAsync(params T[] entidades);
+        Task RemoverAsync(params T[] entidades);
         /// <summary>
         /// Adiciona entidades em Lote
         /// </summary>
         /// <param name="entidades"></param>
-        void AdicionarLote(List<T> entidades);
+        void AdicionarLote(IEnumerable<T> entidades);
         /// <summary>
         /// Adiciona entidades em Lote
         /// </summary>
         /// <param name="entidades"></param>
         /// <returns></returns>
-        Task AdicionarLoteAsync(List<T> entidades);
+        Task AdicionarLoteAsync(IEnumerable<T> entidades);
         /// <summary>
         /// Executa comando sql fornecido 
         /// </summary>
         /// <param name="parametros"></param>
         /// <param name="comando"></param>
         /// <returns></returns>
-        int ExecutaComandoSql(List<ParametroComandoSql> parametros, string comando);
+        int ExecutaComandoSql(IEnumerable<ParametroComandoSql> parametros, string comando);
         /// <summary>
         /// Executa comando sql fornecido 
         /// </summary>
         /// <param name="parametros"></param>
         /// <param name="comando"></param>
         /// <returns></returns>
-        Task<int> ExecutaComandoSqlAsync(List<ParametroComandoSql> parametros, string comando);
+        Task<int> ExecutaComandoSqlAsync(IEnumerable<ParametroComandoSql> parametros, string comando);
     }
 }
