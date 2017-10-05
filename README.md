@@ -11,10 +11,10 @@ Os Exemplos utilizam a bibilioteca em EF Core, porem, você pode implementar seu
 
 # Nuget
 
-As bibliotecas geradas estão disponíveis via nuget.org;
+As bibliotecas geradas estão disponíveis via nuget.org:
 
-Install-Package MicroDDD.Dominio
-Install-Package MicroDDD.Infra 
-Install-Package MicroDDD.Aplicacao
-Install-Package MicroDDD.Infra.IoC
-Install-Package MicroDDD.EntityFramework
+Install-Package MicroDDD.Dominio;
+Install-Package MicroDDD.Infra; 
+Install-Package MicroDDD.Aplicacao;
+Install-Package MicroDDD.Infra.IoC;
+Install-Package MicroDDD.EntityFramework;
