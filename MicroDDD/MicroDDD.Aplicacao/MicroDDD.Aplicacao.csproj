@@ -1,15 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
+  <PropertyGroup>    
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Title>MicroDDD.Aplicacao</Title>
     <PackageId>MicroDDD.Aplicacao</PackageId>
     <PackageVersion>0.0.1</PackageVersion>
     <Authors>Fernando Romano Batista</Authors>
-    <Description>Biblioteca com classes base de aplicação para arquitetura de microserviços utilizando DDD</Description>
+    <Description>Projeto em andamento. Biblioteca com classes base de aplicação para arquitetura de microserviços utilizando DDD</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReleaseNotes>Funcionalidades básicas</PackageReleaseNotes>
     <Copyright>Copyright 2017 (c) Fernando Romano Batista. All rights reserved.</Copyright>
     <PackageTags>ddd aplicacao microservices</PackageTags>
+    <PackageProjectUrl>https://github.com/frbatist/MicroDDD</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
