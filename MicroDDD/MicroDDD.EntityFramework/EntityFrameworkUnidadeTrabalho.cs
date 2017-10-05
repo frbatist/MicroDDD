@@ -34,7 +34,7 @@ namespace MicroDDD.EntityFramework
 
         public void Dispose()
         {
-            _contexto.Dispose():
+            _contexto.Dispose();
         }
 
         public void Finalizar()
