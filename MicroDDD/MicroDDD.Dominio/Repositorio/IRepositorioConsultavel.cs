@@ -13,13 +13,13 @@ namespace MicroDDD.Dominio.Repositorio
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<T> ObterPorIdAsync(long id);
+        Task<T> ObterPorIdAsync<TId>(TId id);
         /// <summary>
         /// Obter entidade T por id de maneira assincrona 
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        T ObterPorId(long id);
+        T ObterPorId<TId>(TId id);
         /// <summary>
         /// Obtem um objeto de consulta para o filtro fornecido
         /// </summary>

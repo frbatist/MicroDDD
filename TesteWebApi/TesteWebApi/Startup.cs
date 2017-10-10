@@ -33,11 +33,9 @@ namespace TesteWebApi
         {
             services.AddDbContext<Contexto>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
             services.AddScoped<DbContext, Contexto>();                        
-            EntityFrameworkIoc.Configurar(services);
-            //TODO mudar para não fazer no construtor, fica bem estranho
+            EntityFrameworkIoc.Configurar(services);            
             var ioC = new ConfiguradorServicos(services);
             ioC.Configurar();
-
             services.AddScoped<IRepositorio<Autor>, AutorRepositorio>();
             services.AddScoped<IAutorAplicacao, AutorAplicacao>();
             services.AddMvc();

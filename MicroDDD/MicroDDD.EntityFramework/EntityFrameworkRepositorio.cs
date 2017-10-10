@@ -78,12 +78,12 @@ namespace MicroDDD.EntityFramework
             ));
         }
 
-        public T ObterPorId(long id)
+        public T ObterPorId<TId>(TId id)
         {
             return _contexto.Set<T>().Find(id);
         }
 
-        public Task<T> ObterPorIdAsync(long id)
+        public Task<T> ObterPorIdAsync<TId>(TId id)
         {
             return _contexto.Set<T>().FindAsync(id);
         }
