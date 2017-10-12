@@ -32,12 +32,12 @@ namespace TesteWebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<Contexto>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
-            services.AddScoped<DbContext, Contexto>();                        
+            services.AddScoped<DbContext, Contexto>();
             EntityFrameworkIoc.Configurar(services);            
             var ioC = new ConfiguradorServicos(services);
             ioC.Configurar();
             services.AddScoped<IRepositorio<Autor>, AutorRepositorio>();
-            services.AddScoped<IAutorAplicacao, AutorAplicacao>();
+            services.AddScoped<IAutorAplicacao, AutorAplicacao>();            
             services.AddMvc();
         }
 

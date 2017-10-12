@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace TesteWebApi.Entidades
 {
-    public class Autor : IEntidade<long>, IEntidade
+    public class Livro : IEntidade<long>
     {
         public long Id { get; set; }
-        public string Nome { get; set; }        
     }
 }

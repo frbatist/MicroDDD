@@ -9,7 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MicroDDD.EntityFramework" Version="0.0.2" />
+    <PackageReference Include="MicroDDD.Dominio" Version="0.0.3" />
+    <PackageReference Include="MicroDDD.EntityFramework" Version="0.0.7" />
     <PackageReference Include="MicroDDD.Infra.IoC" Version="0.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />

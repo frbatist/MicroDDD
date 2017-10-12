@@ -20,7 +20,7 @@ namespace TesteWebApi.Controllers
         }
 
         public async Task<IEnumerable<Autor>> Get()
-        {
+        {            
             return await _autorAplicacao.ObterTodos();
         }
     }
