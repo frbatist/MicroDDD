@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MicroDDD.Dominio\MicroDDD.Dominio.csproj" />
+    <ProjectReference Include="..\MicroDDD.Infra\MicroDDD.Infra.csproj" />
   </ItemGroup>
 
 </Project>
