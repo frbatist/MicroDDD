@@ -3,11 +3,11 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Title>MicroDDD.Infra.IoC</Title>
     <PackageId>MicroDDD.Infra.IoC</PackageId>
-    <PackageVersion>0.0.2</PackageVersion>
+    <PackageVersion>0.0.3</PackageVersion>
     <Authors>Fernando Romano Batista</Authors>
     <Description>Projeto em andamento. Biblioteca base com implementações IoC para arquitetura de microserviços utilizando DDD</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Funcionalidades básicas</PackageReleaseNotes>
+    <PackageReleaseNotes>IQueryableHelper</PackageReleaseNotes>
     <Copyright>Copyright 2017 (c) Fernando Romano Batista. All rights reserved.</Copyright>
     <PackageTags>ddd infra ioc microservices</PackageTags>
     <PackageProjectUrl>https://github.com/frbatist/MicroDDD</PackageProjectUrl>
@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MicroDDD.Aplicacao\MicroDDD.Aplicacao.csproj" />
     <ProjectReference Include="..\MicroDDD.Dominio\MicroDDD.Dominio.csproj" />
+    <ProjectReference Include="..\MicroDDD.EntityFramework\MicroDDD.EntityFramework.csproj" />
     <ProjectReference Include="..\MicroDDD.Infra\MicroDDD.Infra.csproj" />
   </ItemGroup>
   <ItemGroup>

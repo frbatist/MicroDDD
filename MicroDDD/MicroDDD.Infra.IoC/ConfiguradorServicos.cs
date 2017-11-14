@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MicroDDD.Infra.Helpers;
 using Microsoft.Extensions.DependencyInjection;
+using MicroDDD.EntityFramework;
 
 namespace MicroDDD.Infra.IoC
 {
@@ -18,8 +19,9 @@ namespace MicroDDD.Infra.IoC
         public void Configurar()
         {
             _services.AddScoped<ICompactacaoHelper, CompactacaoHelper>();         
-            _services.AddScoped<IRestHelper, RestHelper>();            
-            _services.AddSingleton<IHttpClientHelper, HttpClientHelper>();            
+            _services.AddScoped<IRestHelper, RestHelper>();
+            _services.AddScoped<IQueryableHelper, QueryableHelper>();
+            _services.AddSingleton<IHttpClientHelper, HttpClientHelper>();
         }
 
         public void Registrar<TI, TC>(ServiceLifetime? lifeTime = null)
