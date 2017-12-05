@@ -90,7 +90,15 @@ namespace MicroDDD.EntityFramework
 
         public IQueryable<T> ObterTodos(Expression<Func<T, bool>> filtro = null, params Expression<Func<T, object>>[] include)
         {
-            return _contexto.Set<T>();
+            IQueryable<T> consulta = _contexto.Set<T>();
+            foreach (var item in include)
+            {
+                consulta = consulta.Include(item);
+            }
+
+            if (filtro != null)
+                consulta = consulta.Where(filtro);
+            return consulta;
         }
 
         public void Remover(params T[] entidades)
@@ -104,6 +112,16 @@ namespace MicroDDD.EntityFramework
             {
                 _contexto.Set<T>().RemoveRange(entidades);
             });
+        }
+
+        void IRepositorioConsultavel<T>.CarregarReferencia<P>(T entidade, Expression<Func<T, IEnumerable<P>>> propriedadeLista)
+        {
+            _contexto.Entry(entidade).Collection(propriedadeLista);
+        }
+
+        void IRepositorioConsultavel<T>.CarregarReferencia<P>(T entidade, Expression<Func<T, P>> propriedade)
+        {
+            _contexto.Entry(entidade).Reference(propriedade);
         }
     }
 }
