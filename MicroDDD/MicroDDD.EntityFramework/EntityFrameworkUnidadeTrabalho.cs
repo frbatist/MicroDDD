@@ -8,7 +8,7 @@ namespace MicroDDD.EntityFramework
 {
     public class EntityFrameworkUnidadeTrabalho : IUnidadeTrabalho
     {
-        private DbContext _contexto;
+        protected DbContext _contexto;
         private readonly IServiceProvider _services;
 
         public EntityFrameworkUnidadeTrabalho(DbContext contexto, IServiceProvider services)
