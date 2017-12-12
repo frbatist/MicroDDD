@@ -1,5 +1,6 @@
 ﻿using MicroDDD.Dominio.Entidade;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -27,6 +28,19 @@ namespace MicroDDD.Dominio.Repositorio
         /// <param name="include">Propriedades incluidas para eager loading</param>
         /// <returns></returns>
         IQueryable<T> ObterTodos(Expression<Func<T, bool>> filtro = null, params Expression<Func<T, object>>[] include);
-
+        /// <summary>
+        /// Realiza carga de uma propriedade de navegação (Explicit load)
+        /// </summary>
+        /// <typeparam name="P">Tipo da propriedade</typeparam>
+        /// <param name="entidade"></param>
+        /// <param name="propriedadeLista"></param>
+        void CarregarReferencia<P>(T entidade, Expression<Func<T, IEnumerable<P>>> propriedadeLista) where P : class, IEntidade;
+        /// <summary>
+        /// Realiza carga de uma propriedade de navegação (Explicit load)
+        /// </summary>
+        /// <typeparam name="P">Tipo da propriedade</typeparam>
+        /// <param name="entidade"></param>
+        /// <param name="propriedade"></param>
+        void CarregarReferencia<P>(T entidade, Expression<Func<T, P>> propriedade) where P : class, IEntidade;
     }
 }

@@ -6,7 +6,6 @@ namespace MicroDDD.Aplicacao
 {
     public class AplicacaoBase : IAplicacao
     {
-        public IUsuarioAplicacao UsuarioAplicacao { get; set; }
         protected IUnidadeTrabalho _unidadeTrabalho;
 
         public AplicacaoBase(IUnidadeTrabalho unidadeTrabalho)
