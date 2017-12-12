@@ -37,12 +37,12 @@ namespace MicroDDD.EntityFramework
             _contexto.Dispose();
         }
 
-        public void Finalizar()
+        public virtual void Finalizar()
         {
             _contexto.SaveChanges();
         }
 
-        public Task FinalizarAsync()
+        public virtual Task FinalizarAsync()
         {
             return _contexto.SaveChangesAsync();
         }
