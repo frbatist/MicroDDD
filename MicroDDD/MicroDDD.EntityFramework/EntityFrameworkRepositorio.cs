@@ -35,8 +35,12 @@ namespace MicroDDD.EntityFramework
             {
                 if (_contexto.Entry<T>(entidade).State == EntityState.Detached)
                 {
-                    _contexto.Set<T>().Attach(entidade);
-                }                
+                    _contexto.Attach(entidade);
+                }
+                else
+                {
+                    _contexto.Update(entidade);
+                }
             }
         }
 
@@ -95,14 +99,14 @@ namespace MicroDDD.EntityFramework
 
         public void Remover(params T[] entidades)
         {
-            _contexto.Set<T>().RemoveRange(entidades);
+            _contexto.RemoveRange(entidades);
         }
 
         public Task RemoverAsync(params T[] entidades)
         {
             return Task.Run(() =>
             {
-                _contexto.Set<T>().RemoveRange(entidades);
+                _contexto.RemoveRange(entidades);
             });
         }
     }
