@@ -15,7 +15,7 @@ namespace MicroDDD.Infra.IoC
 
         public void Configurar()
         {
-            _services.AddScoped<ICompactacaoHelper, CompactacaoHelper>();         
+            _services.AddScoped<ICompactacaoHelper, CompactacaoHelper>();
             _services.AddScoped<IRestHelper, RestHelper>();
             _services.AddScoped<IQueryableHelper, QueryableHelper>();
             _services.AddSingleton<IHttpClientHelper, HttpClientHelper>();
