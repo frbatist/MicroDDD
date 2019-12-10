@@ -1,5 +1,4 @@
-﻿using MicroDDD.Aplicacao.Identidade;
-using MicroDDD.Dominio.Repositorio;
+﻿using MicroDDD.Dominio.Repositorio;
 using System.Threading.Tasks;
 
 namespace MicroDDD.Aplicacao

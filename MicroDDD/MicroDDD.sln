@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroDDD.Aplicacao", "Micro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroDDD.Infra", "MicroDDD.Infra\MicroDDD.Infra.csproj", "{CD6B86FF-6F9D-43EB-ACD8-AA5386235EDC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroDDD.Infra.IoC", "MicroDDD.Infra.IoC\MicroDDD.Infra.IoC.csproj", "{8845A6A0-3783-427C-AA6E-7AD9D186DB30}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroDDD.EntityFramework", "MicroDDD.EntityFramework\MicroDDD.EntityFramework.csproj", "{B122B9C2-D668-40B8-A385-DE252953F250}"
 EndProject
 Global
@@ -31,10 +29,6 @@ Global
 		{CD6B86FF-6F9D-43EB-ACD8-AA5386235EDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD6B86FF-6F9D-43EB-ACD8-AA5386235EDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD6B86FF-6F9D-43EB-ACD8-AA5386235EDC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8845A6A0-3783-427C-AA6E-7AD9D186DB30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8845A6A0-3783-427C-AA6E-7AD9D186DB30}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8845A6A0-3783-427C-AA6E-7AD9D186DB30}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8845A6A0-3783-427C-AA6E-7AD9D186DB30}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B122B9C2-D668-40B8-A385-DE252953F250}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B122B9C2-D668-40B8-A385-DE252953F250}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B122B9C2-D668-40B8-A385-DE252953F250}.Release|Any CPU.ActiveCfg = Release|Any CPU
