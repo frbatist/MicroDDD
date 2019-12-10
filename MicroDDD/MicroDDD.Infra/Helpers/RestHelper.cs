@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MicroDDD.Infra.Helpers
@@ -60,7 +60,7 @@ namespace MicroDDD.Infra.Helpers
         private async Task<T> DesserializaResponse<T>(ResponseRequisicaoRest retornoRequisicao)
         {
             var json = await ObterJsonResponse(retornoRequisicao);
-            var retorno = JsonConvert.DeserializeObject<T>(json);
+            var retorno = JsonSerializer.Deserialize<T>(json);
             json = null;
             return retorno;
         }
@@ -98,7 +98,7 @@ namespace MicroDDD.Infra.Helpers
                     }
                     else
                     {
-                        string stringjson = JsonConvert.SerializeObject(valor);
+                        string stringjson = JsonSerializer.Serialize(valor);
                         StringBuilder erro = new StringBuilder();
                         erro.Append("Endereço: ");
                         erro.Append(endereco);
@@ -133,13 +133,13 @@ namespace MicroDDD.Infra.Helpers
                 case TipoRequisicaoRest.Get:
                     return await client.GetAsync(endereco, _configuracoesRequisicaoRest.TimeOut, configuraRequisicao);
                 case TipoRequisicaoRest.Post:
-                    var stringjson = JsonConvert.SerializeObject(valor);
+                    var stringjson = JsonSerializer.Serialize(valor);
                     var stringContent = new StringContent(stringjson, Encoding.UTF8, "application/json");
                     return await client.PostAsync(endereco, stringContent, _configuracoesRequisicaoRest.TimeOut, configuraRequisicao);
                 case TipoRequisicaoRest.Delete:
                     return await client.DeleteAsync(endereco, _configuracoesRequisicaoRest.TimeOut, configuraRequisicao);
                 case TipoRequisicaoRest.Put:
-                    stringjson = JsonConvert.SerializeObject(valor);
+                    stringjson = JsonSerializer.Serialize(valor);
                     stringContent = new StringContent(stringjson, Encoding.UTF8, "application/json");
                     return await client.PutAsync(endereco, stringContent, _configuracoesRequisicaoRest.TimeOut, configuraRequisicao);
                 default:

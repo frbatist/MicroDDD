@@ -14,7 +14,7 @@ namespace MicroDDD.Dominio.Repositorio
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<T> ObterPorIdAsync<TId>(TId id);
+        ValueTask<T> ObterPorIdAsync<TId>(TId id);
         /// <summary>
         /// Obter entidade T por id de maneira assincrona 
         /// </summary>

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+
 
 namespace MicroDDD.Infra.Helpers
 {
@@ -25,7 +26,7 @@ namespace MicroDDD.Infra.Helpers
         {
             using (var cts = new CancellationTokenSource(timeout))
             {
-                var stringjson = JsonConvert.SerializeObject(value);
+                var stringjson = JsonSerializer.Serialize(value);
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, uri)
                 {
                     Content = new StringContent(stringjson, Encoding.UTF8, "application/json")
@@ -40,7 +41,7 @@ namespace MicroDDD.Infra.Helpers
         {
             using (var cts = new CancellationTokenSource(timeout))
             {
-                var stringjson = JsonConvert.SerializeObject(value);
+                var stringjson = JsonSerializer.Serialize(value);
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, uri)
                 {
                     Content = new StringContent(stringjson, Encoding.UTF8, "application/json")

@@ -54,7 +54,7 @@ namespace MicroDDD.EntityFramework
 
         public int ExecutaComandoSql(IEnumerable<ParametroComandoSql> parametros, string comando)
         {
-            return _contexto.Database.ExecuteSqlCommand(comando, parametros.Select
+            return _contexto.Database.ExecuteSqlRaw(comando, parametros.Select
                 (
                     d => new SqlParameter
                     {
@@ -69,7 +69,7 @@ namespace MicroDDD.EntityFramework
 
         public Task<int> ExecutaComandoSqlAsync(IEnumerable<ParametroComandoSql> parametros, string comando)
         {
-            return _contexto.Database.ExecuteSqlCommandAsync(comando, parametros.Select
+            return _contexto.Database.ExecuteSqlRawAsync(comando, parametros.Select
                     (
                         d => new SqlParameter
                         {
@@ -87,7 +87,7 @@ namespace MicroDDD.EntityFramework
             return _contexto.Set<T>().Find(id);
         }
 
-        public Task<T> ObterPorIdAsync<TId>(TId id)
+        public ValueTask<T> ObterPorIdAsync<TId>(TId id)
         {
             return _contexto.Set<T>().FindAsync(id);
         }
